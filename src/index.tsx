@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import dayjs from 'dayjs';
 
-import { HashRouter } from 'react-router-dom';
-
 import App from './App';
 import './styles/Global';
 
@@ -15,10 +13,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <HashRouter>
-      <SettingsProvider>
-        <App />
-      </SettingsProvider>
-    </HashRouter>
+    <SettingsProvider>
+      <App />
+    </SettingsProvider>
   </React.StrictMode>
 );
