@@ -1,79 +1,69 @@
-import { fileURLToPath, URL } from 'url';
-import { defineConfig, splitVendorChunkPlugin } from 'vite';
-import react from '@vitejs/plugin-react';
-import { imagetools } from 'vite-imagetools';
-import { VitePWA } from 'vite-plugin-pwa';
-import wyw from '@wyw-in-js/vite';
+import { fileURLToPath, URL } from 'url'
+import { defineConfig, splitVendorChunkPlugin } from 'vite'
+import react from '@vitejs/plugin-react'
+import { imagetools } from 'vite-imagetools'
+import { VitePWA } from 'vite-plugin-pwa'
+import wyw from '@wyw-in-js/vite'
+
+// 🔹 Detecta CI (GitHub Actions)
+const isCI = process.env.CI === 'true'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/ragnarokmvptimer/',
+
   json: {
     stringify: true,
   },
+
   resolve: {
-    alias: [
-      {
-        find: '@',
-        replacement: fileURLToPath(new URL('./src', import.meta.url)),
-      },
-    ],
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
   },
+
   plugins: [
     splitVendorChunkPlugin(),
-    react(),
-    const isCI = process.env.CI === 'true';
 
-export default defineConfig({
-  base: '/ragnarokmvptimer/',
-  plugins: [
     react(),
 
-    // 👇 wyw SOMENTE em dev
+    // 🔹 wyw SOMENTE em dev (quebra no CI)
     !isCI &&
       wyw({
         include: ['**/*.{ts,tsx}'],
       }),
 
-    VitePWA({
-      base: '/ragnarokmvptimer/',
-      manifest: {
-        start_url: '/ragnarokmvptimer/',
-        scope: '/ragnarokmvptimer/',
-      },
-    }),
-  ].filter(Boolean),
-});
     imagetools({
-      exclude: ['./src/assets/mvp_icons_animated/'],
-      defaultDirectives: (url) => {
-        return new URLSearchParams({
+      exclude: ['./src/assets/mvp_icons_animated/**/*'],
+      defaultDirectives: () =>
+        new URLSearchParams({
           format: 'webp',
           lossless: 'false',
-        });
-      },
+        }),
     }),
+
     VitePWA({
       base: '/ragnarokmvptimer/',
       injectRegister: false,
       registerType: 'autoUpdate',
+
       devOptions: {
         enabled: process.env.NODE_ENV === 'development',
       },
+
       manifest: {
-        short_name: 'MVP Timer',
         name: 'Ragnarok MVP Timer',
+        short_name: 'MVP Timer',
         lang: 'en',
         description: 'app to track ragnarok mvp respawn',
         display: 'standalone',
+
+        start_url: '/ragnarokmvptimer/',
+        scope: '/ragnarokmvptimer/',
+
         theme_color: '#f89200',
         background_color: '#F6F8FA',
-        related_applications: [
-          {
-            platform: 'web',
-            url: 'https://ragnarok-mvp-timer.com',
-          },
-        ],
+
         icons: [
           {
             src: '/ragnarokmvptimer/icons/favicon-16x16.png',
@@ -96,6 +86,7 @@ export default defineConfig({
             type: 'image/png',
           },
         ],
+
         screenshots: [
           {
             src: '/ragnarokmvptimer/screenshots/site-screenshot.webp',
@@ -104,7 +95,6 @@ export default defineConfig({
             form_factor: 'wide',
             label: 'Main page',
           },
-          // แก้ไข path ของรูปภาพอื่นๆ ด้วยเช่นกัน...
           {
             src: '/ragnarokmvptimer/screenshots/desktop-servers-screenshot.webp',
             sizes: '1903x1079',
@@ -129,5 +119,5 @@ export default defineConfig({
         ],
       },
     }),
-  ],
-});
+  ].filter(Boolean),
+})
