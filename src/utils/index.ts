@@ -51,10 +51,10 @@ export const SERVERS: IServers = Object.entries(SERVERS_DATA).reduce(
 
 export async function getServerData(server: string) {
   try {
-    const mvpsData = await SERVERS[server || 'iRO']();
+    const mvpsData = await SERVERS[server || 'RagnaTrue']();
     return mvpsData;
   } catch (error) {
-    return await SERVERS['iRO']();
+    return await SERVERS['RagnaTrue']();
   }
 }
 
