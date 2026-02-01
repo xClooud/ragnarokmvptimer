@@ -5,14 +5,17 @@ import { imagetools } from 'vite-imagetools';
 import { VitePWA } from 'vite-plugin-pwa';
 import wyw from '@wyw-in-js/vite';
 
-// 🔹 Detecta ambiente
+// 🔹 Detecta CI (GitHub Actions)
 const isCI = process.env.CI === 'true';
-const isVercel = process.env.VERCEL === '1';
+
+// 🔹 Base:
+// - GitHub Pages → /ragnarokmvptimer/
+// - Vercel → sobrescreve com VITE_BASE=/
+const base = process.env.VITE_BASE || '/ragnarokmvptimer/';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // 🔹 Base correta por ambiente
-  base: isVercel ? '/' : '/ragnarokmvptimer/',
+  base,
 
   json: {
     stringify: true,
@@ -29,7 +32,7 @@ export default defineConfig({
 
     react(),
 
-    // 🔹 wyw SOMENTE em dev (quebra em CI / build)
+    // 🔹 wyw SOMENTE em dev (quebra em CI/build)
     !isCI &&
       wyw({
         include: ['**/*.{ts,tsx}'],
@@ -48,7 +51,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       injectRegister: false,
 
-      // 🔹 Não usar base aqui (deixa o Vite controlar)
+      // ⚠️ NÃO definir base aqui
+      // ⚠️ Paths SEMPRE relativos
       manifest: {
         name: 'Ragnarok MVP Timer',
         short_name: 'MVP Timer',
@@ -56,7 +60,7 @@ export default defineConfig({
         description: 'app to track ragnarok mvp respawn',
         display: 'standalone',
 
-        // 🔹 RELATIVO (funciona em qualquer base)
+        // 🔹 Relativo → funciona em qualquer base
         start_url: '.',
         scope: '.',
 
