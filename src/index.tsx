@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import dayjs from 'dayjs';
-// import 'dayjs/locale/en-gb'; // Import the desired locale
+
+import { HashRouter } from 'react-router-dom';
 
 import App from './App';
 import './styles/Global';
 
 import { SettingsProvider } from './contexts/SettingsContext';
-
-// dayjs.locale('en-gb'); // Set the global locale
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,10 +15,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <SettingsProvider>
-      <App />
-    </SettingsProvider>
-    
-    
+    <HashRouter>
+      <SettingsProvider>
+        <App />
+      </SettingsProvider>
+    </HashRouter>
   </React.StrictMode>
 );
