@@ -22,12 +22,30 @@ export default defineConfig({
   plugins: [
     splitVendorChunkPlugin(),
     react(),
-    wyw({
-      include: ['**/*.{ts,tsx}'],
+    const isCI = process.env.CI === 'true';
+
+export default defineConfig({
+  base: '/ragnarokmvptimer/',
+  plugins: [
+    react(),
+
+    // 👇 wyw SOMENTE em dev
+    !isCI &&
+      wyw({
+        include: ['**/*.{ts,tsx}'],
+      }),
+
+    VitePWA({
       base: '/ragnarokmvptimer/',
+      manifest: {
+        start_url: '/ragnarokmvptimer/',
+        scope: '/ragnarokmvptimer/',
+      },
     }),
+  ].filter(Boolean),
+});
     imagetools({
-      exclude: ['./src/assets/mvp_icons_animated/**/*'],
+      exclude: ['./src/assets/mvp_icons_animated/'],
       defaultDirectives: (url) => {
         return new URLSearchParams({
           format: 'webp',
